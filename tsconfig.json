@@ -1,0 +1,9 @@
+{
+  "_COMMENT": "only used by shadcn/ui cli",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["libs/shadcn/src/*"]
+    }
+  }
+}
