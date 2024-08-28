@@ -1,16 +1,22 @@
 # Nx + Next.js + shadcn/ui
 
-This guide will help you set up a [Nx](https://github.com/nrwl/nx) monorepo with [Next.js](https://github.com/vercel/next.js) and shared [shadcn/ui](https://github.com/shadcn-ui/ui) library support.
+<!-- Result: Once the shadcn library is initialized according to [Step 3](#3-shadcnui-lib), you can add more shadcn/ui components by the cli and simple check in [Step 3.5](#35-add-shadcnui-components). -->
 
-> Once the shadcn library is initialized according to [3. shadcn/ui Lib](#3-shadcnui-lib), you can add more components by following the simple steps in [3.5 Add shadcn/ui components](#35-add-shadcnui-components) in the future.
+This guide will helps you build an [Nx](https://github.com/nrwl/nx) monorepo with [Next.js](https://github.com/vercel/next.js) and a shared [shadcn/ui](https://github.com/shadcn-ui/ui) library.
 
-## Inspiration & References
+After following this guide, you'll have an Nx monorepo with a working shadcn/ui library that allows easy addition of components via CLI and simple check.
 
-- the discussion in the [shadcn/ui GitHub Issue #778](https://github.com/shadcn/ui/issues/778)
-- [anteqkois/shadcn-nx-nextjs-boilerplate](https://github.com/anteqkois/shadcn-nx-nextjs-boilerplate)
-- [brunos3d/shadcn-ui-nx-next](https://github.com/brunos3d/shadcn-ui-nx-next)
+## Versions
 
-## 1. Create a new Nx workspace
+- Nx: 19.5.3
+- pnpm: 9.5.0
+- Next.js: 14.2.3
+
+## Getting Started
+
+### Nx Workspace
+
+Create a new Nx workspace with the following settings,
 
 ```bash
 npx create-nx-workspace@latest nx-next-shadcn --pm=pnpm
@@ -24,9 +30,11 @@ npx create-nx-workspace@latest nx-next-shadcn --pm=pnpm
 cd nx-next-shadcn
 ```
 
-## 2. Next.js App
+### Next.js App
 
-### 2-1 Add a Next.js application
+#### 2-1 Initialization
+
+Install the necessary packages and add a Next.js application,
 
 ```bash
 nx add @nx/next
@@ -34,27 +42,27 @@ nx add @nx/react # for jest config
 nx g @nx/next:app web --directory=apps/web --projectNameAndRootFormat=as-provided --style=tailwind --appDir=true --src=true
 ```
 
-Maybe you need to install the dependencies for Playwright:
+You might need to install the dependencies for Playwright if you want to use it,
 
 ```bash
 npx playwright install-deps
 ```
 
-### 2-2 More Prettier _(optional)_
+#### 2-2 _(optional)_ More Prettier
 
-Install the necessary packages:
+Install the necessary packages,
 
 ```bash
 pnpm add -D prettier@3 prettier-plugin-tailwindcss @trivago/prettier-plugin-sort-imports
 ```
 
-Edit [`.prettierignore`](.prettierignore):
+Edit [`.prettierignore`](.prettierignore),
 
 ```diff
 + pnpm-lock.yaml
 ```
 
-Edit [`.prettierrc`](.prettierrc):
+Edit [`.prettierrc`](.prettierrc),
 
 ```json
 {
@@ -64,27 +72,29 @@ Edit [`.prettierrc`](.prettierrc):
 }
 ```
 
-Run formatting:
+Test formatting,
 
 ```bash
 nx format
 ```
 
-## 3. shadcn/ui Lib
+### shadcn/ui Library
 
-### 3.1 Create a new library
+#### 3.1 Initialization
 
 ```bash
 nx g @nx/next:lib shadcn --directory=libs/shadcn --projectNameAndRootFormat=as-provided --component=false --style=css
 ```
 
-### 3.2 Remove unnecessary files _(optional)_
+#### 3.2 _(optional)_ Cleanup
+
+Remove Unnecessary Files,
 
 ```bash
 rm libs/shadcn/src/server.ts libs/shadcn/src/lib/hello-server.tsx
 ```
 
-Edit root [`tsconfig.base.json`](tsconfig.base.json):
+Edit root [`tsconfig.base.json`](tsconfig.base.json),
 
 ```diff
 {
@@ -96,28 +106,37 @@ Edit root [`tsconfig.base.json`](tsconfig.base.json):
 }
 ```
 
-### 3.3 Initialize shadcn/ui
+#### 3.3 Download Script
 
-> Alternatively, you can complete this initialization by copying the following files to your monorepo:
->
-> | File                                               | Destination                 | Purpose           |
-> | -------------------------------------------------- | --------------------------- | ----------------- |
-> | [tsconfig.json](/tsconfig.json)                    | monorepo root               | CLI               |
-> | [components.json](/components.json)                | monorepo root               | CLI               |
-> | [tailwind.config.js](/apps/web/tailwind.config.js) | `apps/<next-apps>/`         | TailwindCSS       |
-> | [global.css](/apps/web/src/app/global.css)         | `apps/<next-apps>/src/app/` | CSS               |
-> | [utils.ts](/libs/shadcn/src/lib/utils.ts)          | `libs/shadcn/src/lib`       | Utility functions |
->
-> And Install the necessary packages:
->
-> ```bash
-> pnpm add tailwindcss-animate class-variance-authority clsx tailwind-merge
-> pnpm add lucide-react
-> ```
->
+```bash
+curl -LO https://github.com/OoadadaoO/nx-next-shadcn/releases/download/v0.0.1/post-add.sh
+chmod +x ./post-add.sh
+```
+
+#### 3.4 Prerequisites for shadcn/ui CLI
+
+Copy the following files to your monorepo:
+
+| Source                                             | Destination                 | Purpose           |
+| -------------------------------------------------- | --------------------------- | ----------------- |
+| [tsconfig.json](/tsconfig.json)                    | monorepo root               | CLI               |
+| [components.json](/components.json)                | monorepo root               | CLI               |
+| [tailwind.config.js](/apps/web/tailwind.config.js) | `apps/<next-apps>/`         | TailwindCSS       |
+| [global.css](/apps/web/src/app/global.css)         | `apps/<next-apps>/src/app/` | CSS               |
+| [utils.ts](/libs/shadcn/src/lib/utils.ts)          | `libs/shadcn/src/lib`       | Utility functions |
+
+Install the necessary packages,
+
+```bash
+pnpm add tailwindcss-animate class-variance-authority clsx tailwind-merge
+pnpm add lucide-react
+```
+
+#### 3.4b Alternative: Manual Setup
+
 > The following steps are more dependent on the shadcn/ui official CLI and your preferences.
 
-Prepare the necessary files:
+Prepare the necessary files,
 
 ```bash
 touch tailwind.config.js
@@ -132,7 +151,7 @@ echo '{
 }' > tsconfig.json
 ```
 
-Initialize shadcn/ui by CLI:
+Initialize shadcn/ui by CLI,
 
 ```bash
 pnpm dlx shadcn-ui@latest init
@@ -152,24 +171,19 @@ pnpm dlx shadcn-ui@latest init
 ✔ Write configuration to components.json. Proceed? # Y
 ```
 
-Modify the files in your Next.js apps:
+Modify the files in your Next.js apps,
 
-- Merging properties from the export of [`libs/shadcn/tailwind.config.js`](/libs/shadcn/tailwind.config.js) (excluding the `content` field) into the export of tailwind config files in your Next.js apps.
+- `/apps/<next-apps>/tailwind.config.js`: Merge the properties from the export of [`libs/shadcn/tailwind.config.js`](/libs/shadcn/tailwind.config.js), excluding the `content` field.
 
-- Merge the content of [`libs/shadcn/global.css`](/libs/shadcn/global.css) into the global CSS files in your Next.js apps and keep the rules you need.
+- `/apps/<next-apps>/src/app/global.css`: Merge the content of [`libs/shadcn/global.css`](/libs/shadcn/global.css) and keep the css rules you need.
 
 > See the [apps/web/tailwind.config.js](/apps/web/tailwind.config.js) and [apps/web/src/app/global.css](/apps/web/src/app/global.css) for reference.
 
-### 3.4 Download script
+## Usage
 
-```bash
-curl -LO https://github.com/OoadadaoO/nx-next-shadcn/releases/download/v0.0.1/post-add.sh
-chmod +x ./post-add.sh
-```
+### Add shadcn/ui Components
 
-### 3.5 Add shadcn/ui components
-
-_**Completely install**_ the components:
+_**Completely install**_ the components,
 
 ```bash
 pnpm dlx shadcn-ui@latest add # choose the components you need
@@ -177,19 +191,20 @@ pnpm dlx shadcn-ui@latest add # choose the components you need
 nx format
 ```
 
-Check [`libs/shadcn/src/components/ui/index.ts`](/libs/shadcn/src/components/ui/index.ts) and maybe you will encounter a **naming conflict (TS2308)** when re-exporting the component functions.
+Open and check [`libs/shadcn/src/components/ui/index.ts`](/libs/shadcn/src/components/ui/index.ts) and maybe you will encounter a **naming conflict (TS2308)** when re-exporting the component functions.
 
 > It's recommended to edit the export names in the components file rather than that in the re-export file.
-> For example, `toaster.tsx` and `sonner.tsx` both export a function named `Toaster`. To avoid naming conflicts, you can rename the export in the `sonner.tsx`:
+>
+> For example, [`toaster.tsx`](/libs/shadcn/src/components/ui/toaster.tsx) and [`sonner.tsx`](/libs/shadcn/src/components/ui/sonner.tsx) both export a function named `Toaster`. To avoid naming conflicts, you can rewrite the export in the `sonner.tsx`:
 
 ```diff
 - export { Toaster };
 + export { Toaster as SonnerToaster };
 ```
 
-## Usage
+### Use shadcn/ui Components
 
-Now, you can use the components in your Next.js app:
+In your Next.js apps,
 
 ```tsx
 import { Button } from "@nx-next-shadcn/shadcn";
@@ -202,3 +217,9 @@ export default function Home() {
   );
 }
 ```
+
+## References
+
+- the discussion in the [shadcn/ui GitHub Issue #778](https://github.com/shadcn/ui/issues/778)
+- [anteqkois/shadcn-nx-nextjs-boilerplate](https://github.com/anteqkois/shadcn-nx-nextjs-boilerplate)
+- [brunos3d/shadcn-ui-nx-next](https://github.com/brunos3d/shadcn-ui-nx-next)
